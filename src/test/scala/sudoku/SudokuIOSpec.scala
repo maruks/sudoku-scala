@@ -4,7 +4,7 @@ import scala.collection.immutable.VectorBuilder
 
 class SudokuIOSpec extends WordSpec {
   
-  "SudokuIOSpec" should {
+  "SudokuIO" should {
   
     "read puzzle file" in {
       val io = new SudokuIO()
