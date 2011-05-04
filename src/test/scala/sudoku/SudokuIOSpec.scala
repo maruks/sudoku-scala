@@ -1,10 +1,11 @@
 package sudoku
 
 import org.scalatest.WordSpec
+import org.scalatest.matchers.ShouldMatchers
 import java.io.File
 import scala.collection.immutable.VectorBuilder
 
-class SudokuIOSpec extends WordSpec {
+class SudokuIOSpec extends WordSpec with ShouldMatchers {
   
   "SudokuIO" should {
   
@@ -12,14 +13,14 @@ class SudokuIOSpec extends WordSpec {
       
       val p = SudokuIO.readFile(new File("src/test/resources/puzzle1.txt"))
 
-      assert(p.size==9*9)
+      p should have size (9*9)
 
       val b = new VectorBuilder[Int]()      
       for (i <- 0 to 8) b += i
       val vec = b.result
 
       for (g <- p.grouped(9)) {
-	assert(g==vec)      
+	g should equal (vec)      
       }
     }
   }
