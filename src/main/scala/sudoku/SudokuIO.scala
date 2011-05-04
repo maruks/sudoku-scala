@@ -1,8 +1,10 @@
+package sudoku
+
 import java.io._
 import io.Source
 import scala.collection.immutable.VectorBuilder
 
-class SudokuIO {
+object SudokuIO {
 
   def readFile(file: File): Vector[Int] = {
     val b = new VectorBuilder[Int]()
@@ -11,11 +13,11 @@ class SudokuIO {
     b.result()
   }
 
-  def writeFile(file: File, s: Vector[Int]) = {
-    val out = new OutputStreamWriter(new FileOutputStream(file))
-    for (g <- s.grouped(9)) {
-      val str = (g.head.toString() /: g.tail)((a, b) => a + ',' + b)
-      out.write(str)
+  def writeFile(os: OutputStream, s: Vector[Int]) = {
+    val out = new OutputStreamWriter(os)
+    if (s.isEmpty) out.write("no solution") else {
+      val sol = for (g <- s.grouped(9).toList; str = (g.head.toString /: g.tail)(_ + ',' + _)) yield str
+      out.write((sol.head /: sol.tail)(_ + '\n' + _))
     }
     out.close
   }

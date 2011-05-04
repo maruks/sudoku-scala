@@ -1,3 +1,5 @@
+package sudoku
+
 import org.scalatest.WordSpec
 import java.io.File
 import scala.collection.immutable.VectorBuilder
@@ -7,8 +9,8 @@ class SudokuIOSpec extends WordSpec {
   "SudokuIO" should {
   
     "read puzzle file" in {
-      val io = new SudokuIO()
-      val p = io.readFile(new File("src/test/resources/puzzle1.txt"))
+      
+      val p = SudokuIO.readFile(new File("src/test/resources/puzzle1.txt"))
 
       assert(p.size==9*9)
 
