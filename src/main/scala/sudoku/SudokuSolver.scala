@@ -1,21 +1,23 @@
 package sudoku
 
 object SudokuSolver {
-  val numbers = Set(1, 2, 3, 4, 5, 6, 7, 8, 9)
 
-  def solve(p: Vector[Int]): Vector[Int] = {
-    if (p.count(_ == 0) == 0) p else {
-      val set = smallestChangeSet(p)
-      val sol = for (i <- set._2.view) yield solve(p.updated(set._1, i))
-      val res = sol.find(s => !s.isEmpty)
-      res.getOrElse(Vector.empty[Int])
+  def solve(p: Vector[Int]): Option[Vector[Int]] = {
+    if (p.count(_ == 0) == 0) Some(p) else {
+      smallestChangeSet(p) match {
+        case None => None
+        case Some(set) => {
+          val sol = for (i <- set._2.view) yield solve(p.updated(set._1, i))
+          sol.find(_.isDefined).getOrElse(None)
+        }
+      }
     }
   }
 
-  def smallestChangeSet(p: Vector[Int]): (Int, Set[Int]) = {
+  def smallestChangeSet(p: Vector[Int]): Option[(Int, Set[Int])] = {
     val sets = for (i <- 0 to p.size - 1; if (p(i) == 0))
-      yield (i, numbers -- (selectRow(p, i) ++ selectColumn(p, i) ++ selectSquare(p, i)))
-    if (sets.isEmpty) (0, Set.empty[Int]) else sets.reduceLeft((a, b) => if (a._2.size < b._2.size) a else b)
+      yield (i, (1 to 9).toSet -- (selectRow(p, i) ++ selectColumn(p, i) ++ selectSquare(p, i)))
+    if (sets.isEmpty) None else Some(sets.reduceLeft((a, b) => if (a._2.size < b._2.size) a else b))
   }
 
   def selectRow(p: Vector[Int], i: Int) = {

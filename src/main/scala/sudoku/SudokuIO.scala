@@ -13,11 +13,14 @@ object SudokuIO {
     b.result()
   }
 
-  def writeFile(os: OutputStream, s: Vector[Int]) = {
+  def writeFile(os: OutputStream, v: Option[Vector[Int]]) = {
     val out = new OutputStreamWriter(os)
-    if (s.isEmpty) out.write("no solution") else {
-      val sol = for (g <- s.grouped(9).toList; str = (g.head.toString /: g.tail)(_ + ',' + _)) yield str
-      out.write((sol.head /: sol.tail)(_ + '\n' + _))
+    v match {
+      case None => out.write("no solution")
+      case Some(s) => {
+        val sol = for (g <- s.grouped(9).toList; str = (g.head.toString /: g.tail)(_ + ',' + _)) yield str
+        out.write((sol.head /: sol.tail)(_ + '\n' + _))
+      }
     }
     out.close
   }

@@ -9,7 +9,6 @@ class SudokuSolverSpec extends WordSpec {
   "SudokuSolver" should {
 
     val p = SudokuIO.readFile(new File("src/test/resources/puzzle2.txt"))
-    val s = SudokuIO.readFile(new File("src/test/resources/sol2.txt"))
 
     "select first row" in {
       val set = Set(2, 0, 8, 6, 7)
@@ -71,10 +70,28 @@ class SudokuSolverSpec extends WordSpec {
       assert(SudokuSolver.selectSquare(p, 79) == set)
       assert(SudokuSolver.selectSquare(p, 80) == set)
     }
-    "solve sudoku" in {
-      val sol = SudokuSolver.solve(p)
+    "solve second sudoku" in {
+      val p = SudokuIO.readFile(new File("src/test/resources/puzzle2.txt"))
+      val s = SudokuIO.readFile(new File("src/test/resources/sol2.txt"))
+
+      val sol = SudokuSolver.solve(p).getOrElse(Vector.empty)
       assert(sol.length == 81)
       assert(s == sol)
+    }
+
+    "solve third sudoku" in {
+      val p = SudokuIO.readFile(new File("src/test/resources/puzzle3.txt"))
+      val s = SudokuIO.readFile(new File("src/test/resources/sol3.txt"))
+
+      val sol = SudokuSolver.solve(p).getOrElse(Vector.empty)
+      assert(sol.length == 81)
+      assert(s == sol)
+    }
+
+    "report first sudoku unsolvable" in {
+      val p = SudokuIO.readFile(new File("src/test/resources/puzzle1.txt"))
+      val sol = SudokuSolver.solve(p)
+      assert(sol.isEmpty)
     }
   }
 }
