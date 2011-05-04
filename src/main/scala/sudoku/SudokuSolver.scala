@@ -3,13 +3,12 @@ package sudoku
 object SudokuSolver {
 
   def solve(p: Vector[Int]): Option[Vector[Int]] = {
-    if (p.count(_ == 0) == 0) Some(p) else {
-      smallestChangeSet(p) match {
-        case None => None
-        case Some(set) => {
-          val sol = for (i <- set._2.view) yield solve(p.updated(set._1, i))
-          sol.find(_.isDefined).getOrElse(None)
-        }
+    smallestChangeSet(p) match {
+      case None => Some(p)
+      case Some(set) if set._2.isEmpty => None
+      case Some(set) => {
+        val sol = for (i <- set._2.view) yield solve(p.updated(set._1, i))
+        sol.find(_.isDefined).getOrElse(None)
       }
     }
   }
