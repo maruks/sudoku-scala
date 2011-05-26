@@ -7,7 +7,7 @@ object SudokuSolver {
       case None => Some(p)
       case Some(set) if set._2.isEmpty => None
       case Some(set) => {
-        val sol = for (i <- set._2.view) yield solve(p.updated(set._1, i))
+        val sol = for (i <- set._2) yield solve(p.updated(set._1, i))
         sol.find(_.isDefined).getOrElse(None)
       }
     }
