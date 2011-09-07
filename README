@@ -1,0 +1,14 @@
+sudoku solver
+
+## Build
+
+sbt update
+sbt clean compile
+sbt test
+sbt assembly
+
+## Usage
+
+java -jar sudoku-scala-assembly-1.0.jar ../../src/test/resources/puzzle3.txt
+
+
