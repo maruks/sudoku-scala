@@ -71,14 +71,6 @@ class SudokuSolverSpec extends WordSpec with ShouldMatchers {
       SudokuSolver.selectSquare(p, 79) should equal (set)
       SudokuSolver.selectSquare(p, 80) should equal (set)
     }
-    "solve second sudoku" in {
-      val p = SudokuIO.readFile(new File("src/test/resources/puzzle2.txt"))
-      val s = SudokuIO.readFile(new File("src/test/resources/sol2.txt"))
-
-      val sol = SudokuSolver.solve(p).getOrElse(Vector.empty)
-      sol should have length (81)
-      s should equal (sol)
-    }
 
     "solve third sudoku" in {
       val p = SudokuIO.readFile(new File("src/test/resources/puzzle3.txt"))

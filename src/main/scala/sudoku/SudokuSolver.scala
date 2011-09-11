@@ -7,7 +7,7 @@ object SudokuSolver {
       case None => Some(p)
       case Some(set) if set._2.isEmpty => None
       case Some(set) => {
-        val sol = for (i <- set._2) yield solve(p.updated(set._1, i))
+        val sol = for (i <- set._2.toSeq.sorted.view) yield solve(p.updated(set._1, i))
         sol.find(_.isDefined).getOrElse(None)
       }
     }
@@ -16,7 +16,7 @@ object SudokuSolver {
   def smallestChangeSet(p: Vector[Int]): Option[(Int, Set[Int])] = {
     val sets = for (i <- 0 to p.size - 1; if (p(i) == 0))
       yield (i, (1 to 9).toSet -- (selectRow(p, i) ++ selectColumn(p, i) ++ selectSquare(p, i)))
-    if (sets.isEmpty) None else Some(sets.reduceLeft((a, b) => if (a._2.size < b._2.size) a else b))
+    if (sets.isEmpty) None else Some(sets.reduceRight((a, b) => if (a._2.size < b._2.size) a else b))
   }
 
   def selectRow(p: Vector[Int], i: Int) = {
