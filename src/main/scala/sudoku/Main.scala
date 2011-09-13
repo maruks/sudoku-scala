@@ -12,10 +12,10 @@ object Main {
         SudokuIO.writeFile(System.out, sol)
       }
       case Array(f, a) => {
-	val v = SudokuIO.readBatchFile(new File(f))
-	val p = if (a=="p") v.par else v
-	val s = p.map(SudokuSolver.solve(_))
-	s.foreach(SudokuIO.writeFile(System.out, _))
+        val v = SudokuIO.readBatchFile(new File(f))
+        val s = if (a == "p") v.par.map(SudokuSolver.solve(_))
+        else v.map(SudokuSolver.solve(_))
+        s.foreach(SudokuIO.writeFile(System.out, _))
       }
       case _ => println("Usage SudokuSolver <filename>")
     }
