@@ -3,6 +3,7 @@ package sudoku
 object SudokuSolver {
 
   def solve(p: Vector[Int]): Option[Vector[Int]] = {
+
     smallestChangeSet(p) match {
       case None => Some(p)
       case Some(set) if set._2.isEmpty => None
@@ -19,22 +20,21 @@ object SudokuSolver {
   }
 
   def possibleValues(p: Vector[Int], i: Int) = {
-    (1 to 9).toSet -- (selectRow(p, i) ++ selectColumn(p, i) ++ selectSquare(p, i))
+    def select(s : Symbol) = (indexFun(s))(i).map(p(_)).toSet[Int] 
+    (1 to 9).toSet -- (select('row) ++ select('column) ++ select('square))
   }
 
-  def selectRow(p: Vector[Int], i: Int) = {
-    (i - i % 9 to i - i % 9 + 8).map(p(_)).toSet[Int]
-  }
+  val indexFun = Map('row -> selectRow _, 'column -> selectColumn _, 'square -> selectSquare _)
 
-  def selectColumn(p: Vector[Int], i: Int) = {
-    (i % 9 to i % 9 + 72 by 9).map(p(_)).toSet[Int]
-  }
+  def selectRow(i: Int) = (i - i % 9 to i - i % 9 + 8)
 
-  def selectSquare(p: Vector[Int], i: Int) = {
+  def selectColumn(i: Int) = (i % 9 to i % 9 + 72 by 9)
+
+  def selectSquare(i: Int) = {
     val x = i % 9 - (i % 9) % 3
     val y = i / 9 - (i / 9) % 3
     val spos = x + y * 9
     val r = (spos to spos + 2)
-    (r ++ r.map(_ + 9) ++ r.map(_ + 18)).map(p(_)).toSet[Int]
+    r ++ r.map(_ + 9) ++ r.map(_ + 18)
   }
 }
